@@ -13,15 +13,20 @@ return new class extends Migration
     {
         Schema::create('files', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('sender_id');
-            $table->unsignedBigInteger('recipient_id');
+            $table->unsignedBigInteger('user_id');
+            $table->string('type');
+            $table->string('document_number');
+            $table->string('title');
+            $table->text('remarks')->nullable();
             $table->string('file_name')->nullable();
             $table->string('file_path')->nullable();
-            $table->text('message')->nullable();
+            $table->unsignedBigInteger('updated_by')->nullable();
+            $table->boolean('is_deleted')->default(false);
+            $table->uuid('uuid')->unique();
             $table->timestamps();
 
-            $table->foreign('sender_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreign('recipient_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('updated_by')->references('id')->on('users')->onDelete('set null');
         });
     }
 

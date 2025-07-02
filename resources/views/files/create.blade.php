@@ -1,4 +1,3 @@
-
 @extends('layouts.app')
 
 @section('title', 'Upload File')
@@ -12,7 +11,66 @@
                 @csrf
                 <div class="mb-3">
                     <label for="type" class="form-label">Document Type</label>
-                    <input type="text" class="form-control" id="type" name="type" required>
+                    <select class="form-control" id="type" name="type" required>
+                        <option value="" disabled selected>Select Document Type</option>
+                        <option>2023 Procurement</option>
+                        <option>2024 Procurement</option>
+                        <option>Access Pass</option>
+                        <option>Accounts Payable</option>
+                        <option>Admin Internal Doc</option>
+                        <option>AOM COA</option>
+                        <option>BP 202 Form</option>
+                        <option>BTR Certification</option>
+                        <option>Change Order</option>
+                        <option>CIC</option>
+                        <option>CIDOS</option>
+                        <option>CIIMD</option>
+                        <option>CMT Docs</option>
+                        <option>COC-FAC</option>
+                        <option>Contract Renewal</option>
+                        <option>Contract Termination</option>
+                        <option>Contract Termination 2022</option>
+                        <option>CSR</option>
+                        <option>CTC DOCUMENTS</option>
+                        <option>Discontinuance 2023</option>
+                        <option>Download of Funds to ROs</option>
+                        <option>DV / FUND TRANSFER</option>
+                        <option>DV / ORS / FUND TRANSFER</option>
+                        <option>DV / ORS / SARO</option>
+                        <option>End of Sevice</option>
+                        <option>Endorsement</option>
+                        <option>Endorsement/Request letter</option>
+                        <option>FAC-COC</option>
+                        <option>FACC</option>
+                        <option>FUND TRANSFER</option>
+                        <option>LED</option>
+                        <option>Letter</option>
+                        <option>Letter Request</option>
+                        <option>Liquidated Damages</option>
+                        <option>MEMO</option>
+                        <option>MEMO / ORS / DV</option>
+                        <option>Memo and Letter</option>
+                        <option>Memo Endorsement</option>
+                        <option>Mintues of the Meeting</option>
+                        <option>MIS 2019 / FUND TRANSFER</option>
+                        <option>MOA</option>
+                        <option>MOM</option>
+                        <option>ORS / DV</option>
+                        <option>Payment</option>
+                        <option>PCV</option>
+                        <option>Perfomance Bond</option>
+                        <option>PITC</option>
+                        <option>PO/Contract & ORS</option>
+                        <option>Policy</option>
+                        <option>PR</option>
+                        <option>Regional Concern</option>
+                        <option>Reply letter</option>
+                        <option>Salary</option>
+                        <option>Site Replacement</option>
+                        <option>SOA Service Reports</option>
+                        <option>Termination by Convenience</option>
+                        <option>UNDP</option>
+                    </select>
                 </div>
                 <div class="mb-3">
                     <label for="document_number" class="form-label">Document Number</label>

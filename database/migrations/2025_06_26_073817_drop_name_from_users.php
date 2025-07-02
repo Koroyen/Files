@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('files', function (Blueprint $table) {
-            $table->string('type')->nullable()->after('recipient_id');
+        Schema::table('users', function (Blueprint $table) {
+                    $table->dropColumn('name');
 
         });
     }
@@ -22,8 +22,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('files', function (Blueprint $table) {
-            $table->dropColumn('type');
+        Schema::table('users', function (Blueprint $table) {
+                    $table->string('name')->nullable(); // or original definition
 
         });
     }

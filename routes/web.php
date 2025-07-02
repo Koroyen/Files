@@ -6,32 +6,80 @@ use App\Http\Controllers\AccountController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use Illuminate\Support\Facades\Auth;
 use App\Models\File;
+use Illuminate\Http\Request;
 use App\Models\User;
+use App\Http\Controllers\FileController;
 
 
-Route::post('/account/create', [AccountController::class, 'store']);
+
+
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 
 Route::post('/files/send', [App\Http\Controllers\FileController::class, 'send'])->name('files.send');
 
-Route::get('/', function () {
-    return view('welcome');
+Route::middleware(['auth', 'verified'])->group(function () {
+   Route::get('/dashboard', function () {
+    $search = request('search');
+
+    $files = File::when($search, function ($query, $search) {
+        $query->where(function ($q) use ($search) {
+            $q->where('title', 'like', "%{$search}%")
+                ->orWhere('document_number', 'like', "%{$search}%")
+                ->orWhere('type', 'like', "%{$search}%")
+                ->orWhere('uuid', 'like', "%{$search}%");
+        });
+    })->orderBy('created_at', 'desc')
+      ->paginate(7)
+      ->withQueryString(); // ✅ keeps search in the pagination links
+
+    $users = User::where('id', '!=', Auth::id())->get();
+
+    return view('dashboard', compact('files', 'users'));
+})->name('dashboard');
+
+
+    // Route::get('/search-files', function () {
+    //     $search = request('search');
+
+    //     $files = File::when($search, function ($query, $search) {
+    //         $query->where(function ($q) use ($search) {
+    //             $q->where('title', 'like', "%{$search}%")
+    //                 ->orWhere('document_number', 'like', "%{$search}%")
+    //                 ->orWhere('type', 'like', "%{$search}%")
+    //                 ->orWhere('uuid', 'like', "%{$search}%");
+    //         });
+    //     })->get();
+
+    //     return response()->json($files);
+    // });
+
+    Route::get('/my-uploads', function () {
+        $files = File::where('user_id', Auth::id())->paginate(6);
+        return view('profile', compact('files'));
+    })->name('my.uploads');
+
+    Route::get('/files/create', function () {
+        $users = User::where('id', '!=', Auth::id())->get();
+        return view('files.create', compact('users'));
+    });
+
+    // Add these for update and delete:
+    Route::get('/files/{file}/edit', [FileController::class, 'edit'])->name('files.edit');
+    Route::put('/files/{file}', [FileController::class, 'update'])->name('files.update');
+    Route::delete('/files/{file}', [FileController::class, 'destroy'])->name('files.destroy');
 });
 
-Route::get('/dashboard', function () {
-    $files = File::all(); // or use File::where('recipient_id', Auth::id())->get() for user-specific files
-    $users = User::where('id', '!=', Auth::id())->get();    return view('dashboard', compact('files', 'users'));
-})->middleware(['auth', 'verified'])->name('dashboard');
 
 
-Route::get('/files/create', function () {
-    $users = User::where('id', '!=', Auth::id())->get();
-    return view('files.create', compact('users'));
-})->middleware(['auth']);
 
 
 Route::get('/home', function () {
     return view('home');
 })->middleware(['auth'])->name('home');
+
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -41,4 +89,4 @@ Route::middleware('auth')->group(function () {
 
 Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';

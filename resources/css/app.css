@@ -1,1 +1,6 @@
 @import "bootstrap/dist/css/bootstrap.min.css";
+
+.my-table-size td,
+.my-table-size th {
+    font-size: 14px; /* Adjust as needed */
+}

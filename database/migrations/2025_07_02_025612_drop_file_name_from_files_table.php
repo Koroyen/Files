@@ -12,7 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('files', function (Blueprint $table) {
-            $table->boolean('is_deleted')->default(false)->after('updated_by');
+                    $table->dropColumn('file_name');
+
         });
     }
 
@@ -22,7 +23,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('files', function (Blueprint $table) {
-            $table->dropColumn('is_deleted');
+        $table->string('file_name')->nullable();
         });
     }
 };

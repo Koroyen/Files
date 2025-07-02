@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('files', function (Blueprint $table) {
-            $table->unsignedBigInteger('sender_id')->after('id');
-            $table->foreign('sender_id')->references('id')->on('users')->onDelete('cascade');
+        Schema::table('users', function (Blueprint $table) {
+            $table->string('first_name')->after('id');
+            $table->string('last_name')->after('first_name');
         });
     }
 
@@ -22,9 +22,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('files', function (Blueprint $table) {
-            $table->dropForeign(['sender_id']);
-            $table->dropColumn('sender_id');
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn(['first_name', 'last_name']);
         });
     }
 };
