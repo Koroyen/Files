@@ -1,6 +1,24 @@
 @import "bootstrap/dist/css/bootstrap.min.css";
 
-.my-table-size td,
-.my-table-size th {
+.my-table-size td {
+    font-size: 12px; /* Adjust as needed */
+}
+
+.my-table-size th{
     font-size: 14px; /* Adjust as needed */
+}
+
+.my-modal {
+    font-size: 12px
+}
+
+.edit-container {
+   font-size: 12px; /* Adjust as needed */
+}
+
+.create-container {
+   font-size: 12px; /* Adjust as needed */
+}
+.profile-container {
+   font-size: 12px; /* Adjust as needed */
 }

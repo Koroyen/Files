@@ -4,7 +4,7 @@
 @section('title', 'Edit File')
 
 @section('content')
-<div class="container mt-5">
+<div class="container mt-5 edit-container">
     <div class="card bg-dark text-white">
         <div class="card-body">
             @if ($errors->any())
@@ -16,7 +16,7 @@
                 </ul>
             </div>
             @endif
-            <h4 class="mb-4">Edit File</h4>
+            <h4 class="mb-4" style="font-size: 16px;">Edit File</h4>
             <form method="POST" action="{{ route('files.update', $file->id) }}" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')

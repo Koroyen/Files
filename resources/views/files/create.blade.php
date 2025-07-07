@@ -3,10 +3,10 @@
 @section('title', 'Upload File')
 
 @section('content')
-<div class="container mt-5">
+<div class="container mt-5 create-container">
     <div class="card bg-dark text-white">
         <div class="card-body">
-            <h4 class="mb-4">Upload a File</h4>
+            <h4 class="mb-4" style="font-size: 16px;">Upload a File</h4>
             <form method="POST" action="{{ route('files.send') }}" enctype="multipart/form-data">
                 @csrf
                 <div class="mb-3">
@@ -89,6 +89,8 @@
                     <input class="form-control" type="file" id="file" name="file">
                 </div>
                 <button type="submit" class="btn btn-primary">Upload</button>
+                <!-- <button type="submit" class="btn btn-dark ms-4 position-absolute bottom-0 end-0 mb-3 me-3">Back</button> -->
+
             </form>
         </div>
     </div>

@@ -44,14 +44,14 @@
     </script>
     @endif
         <!-- // Simple client-side search bar -->
-    <script>
-        document.getElementById('tableSearch').addEventListener('keyup', function() {
+    <!-- <script>
+        document.getElementById('ajaxSearch').addEventListener('keyup', function() {
             let value = this.value.toLowerCase();
             document.querySelectorAll('tbody tr').forEach(function(row) {
                 row.style.display = row.textContent.toLowerCase().includes(value) ? '' : 'none';
             });
         });
-    </script>
+    </script> -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 

@@ -5,7 +5,7 @@
 @section('title', 'My Profile')
 
 @section('content')
-<div class="container-fluid px-0 py-4">
+<div class="container-fluid px-0 py-4 profile-container">
     <div class="bg-dark shadow-sm rounded-lg p-4 text-white">
         <div class="d-flex align-items-center mb-4">
             <div class="me-3">
@@ -44,7 +44,7 @@
                     <td>{{ $file->remarks }}</td>
                     <td> {{ Str::limit(collect(explode('_', basename($file->file_path), 3))->last(), 30) }}
                     </td>
-                    <td>{{ Str::limit ($file->uuid, 10) }}</td>
+                    <td>{{ Str::limit ($file->uuid, ) }}</td>
                     <td>{{ $file->created_at->format('Y-m-d') }}</td>
                     <td>
                         <!-- View Modal Trigger -->
