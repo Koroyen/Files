@@ -20,6 +20,10 @@
             <form method="POST" action="{{ route('files.update', $file->id) }}" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
+
+                <!-- Hidden redirect input -->
+                <input type="hidden" name="redirect" value="{{ $redirect ?? '' }}">
+
                 <div class="mb-3">
                     <label for="type" class="form-label">Document Type</label>
                     <input type="text" class="form-control" id="type" name="type" value="{{ old('type', $file->type) }}" required>
@@ -38,7 +42,8 @@
                 </div>
                 <button type="submit" class="btn btn-primary">Update</button>
 
-                <a href="{{ route('dashboard') }}" class="btn btn-secondary">Cancel</a>
+                {{-- Cancel button redirects based on request --}}
+                <a href="{{ ($redirect ?? '') === 'profile' ? route('profile.index') : route('dashboard') }}" class="btn btn-dark ms-4 position-absolute bottom-0 end-0 mb-3 me-3">Cancel</a>
             </form>
         </div>
     </div>

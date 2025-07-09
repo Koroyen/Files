@@ -13,9 +13,11 @@
         <a href="#" data-bs-toggle="modal" data-bs-target="#viewFileModal{{ $file->id }}">
             <i class="bi bi-eye text-primary m-2"></i>
         </a>
-        <a href="{{ route('files.edit', $file->id) }}">
-            <i class="bi bi-pencil-square text-warning me-2"></i>
+        <a href="{{ route('files.edit', ['file' => $file->id, 'redirect' => 'dashboard']) }}" class="bi  text-warning me-2" title="Edit">
+            <i class="bi bi-pencil"></i>
         </a>
+
+
         <form action="{{ route('files.destroy', $file->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure?');">
             @csrf
             @method('DELETE')

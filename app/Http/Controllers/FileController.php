@@ -12,13 +12,13 @@ class FileController extends Controller
 {
     public function send(Request $request)
     {
-         
+
         $request->validate([
             'document_number' => 'required|string|max:255',
             'type' => 'required|string|max:255',
             'title' => 'required|string|max:255',
             'remarks' => 'nullable|string',
-            'file' => 'nullable|file|max:2048',
+            'file' => 'nullable|file|max:5120',
         ]);
 
         $filePath = null;
@@ -27,7 +27,7 @@ class FileController extends Controller
             $filename = time() . '_' . $originalName;
             $filePath = $request->file('file')->storeAs('uploads', $filename, 'public');
         }
-        
+
         File::create([
             'user_id' => Auth::id(), // <-- Add this line
             'type' => $request->type,
@@ -38,13 +38,14 @@ class FileController extends Controller
             'is_deleted' => false,
             'uuid' => Str::uuid(), // Generate a UUID
         ]);
-       
+
         return redirect()->route('dashboard')->with('success', 'File uploaded successfully!');
     }
 
-    public function edit(File $file)
+    public function edit(File $file, Request $request)
     {
-        return view('files.edit', compact('file'));
+        $redirect = $request->query('redirect'); // get redirect value from URL
+        return view('files.edit', compact('file', 'redirect'));
     }
 
     public function update(Request $request, File $file)
@@ -53,7 +54,7 @@ class FileController extends Controller
             'type' => 'required|string|max:255',
             'title' => 'required|string|max:255',
             'remarks' => 'nullable|string',
-            'file' => 'nullable|file|max:2048',
+            'file' => 'nullable|file|max:5120',
         ]);
 
         $filePath = $file->file_path;
@@ -71,8 +72,16 @@ class FileController extends Controller
             'updated_by' => Auth::id(),
         ]);
 
+        // Redirect based on source
+        $redirect = $request->input('redirect');
+
+        if ($redirect === 'profile') {
+            return redirect()->route('profile.index')->with('success', 'File updated successfully!');
+        }
+
         return redirect()->route('dashboard')->with('success', 'File updated successfully!');
     }
+
 
     public function destroy(File $file)
     {

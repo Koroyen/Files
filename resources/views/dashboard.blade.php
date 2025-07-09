@@ -8,10 +8,10 @@
     <div class="container-fluid px-0">
         <div class="bg-dark overflow-hidden shadow-sm rounded-lg">
             <div class="p-6 text-white">
-                <h3 class="mb-2" style="font-size: 14px;">Files Storage</h3>
 
                 <!-- Search Bar -->
                 <div class="d-flex justify-content-end mb-4">
+                     <h3 class="mb-2 position-absolute start-0 ms-3 mt-1" style="font-size: 22px;">Files Storage</h3>
                     <form class="w-auto" id="searchForm" onsubmit="return false;">
                         <div class="input-group">
                             <input class="form-control bg-gray text-dark" id="ajaxSearch" type="text" placeholder="Search UUID or Title...">
