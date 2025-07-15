@@ -6,20 +6,29 @@
 @section('content')
 <div class="container-fluid px-0 py-1 profile-container">
     <div class="bg-dark shadow-sm rounded-lg p-4 text-white">
-        <div class="d-flex align-items-center mb-4">
-            <div class="me-3">
-                <i class="bi bi-person-circle" style="font-size: 3rem;"></i>
+        <div class="d-flex align-items-center justify-content-between mb-4">
+            <div class="d-flex align-items-center">
+                <div class="me-3">
+                    <i class="bi bi-person-circle" style="font-size: 3rem;"></i>
+                </div>
+                <div>
+                    <h4 class="mb-1">{{ Auth::user()->last_name }}</h4>
+                    <div class="text-secondary">{{ Auth::user()->email }}</div>
+                    <div class="text-secondary small">Joined: {{ Auth::user()->created_at->format('F d, Y') }}</div>
+                </div>
             </div>
             <div>
-                <h4 class="mb-1">{{ Auth::user()->last_name }}</h4>
-                <div class="text-secondary">{{ Auth::user()->email }}</div>
-                <div class="text-secondary small">Joined: {{ Auth::user()->created_at->format('F d, Y') }}</div>
+                <a href="{{ route('files.bin') }}" class="btn btn-outline-danger">
+                    <i class="bi bi-trash3"></i> Bin
+                </a>
             </div>
         </div>
+
 
         <hr class="border-secondary">
         <div class="mb-3">
             <strong>Total Uploads:</strong> {{ $files->total() }}
+            
         </div>
 
         <h5 class="mb-3">My Uploads</h5>

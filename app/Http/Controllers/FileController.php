@@ -85,7 +85,71 @@ class FileController extends Controller
 
     public function destroy(File $file)
     {
-        $file->delete();
+        $file->update(['is_deleted' => true]);
         return redirect()->route('dashboard')->with('success', 'File deleted!');
     }
+
+    // Show deleted files for the logged-in user
+    public function bin()
+    {
+        $files = File::where('user_id', Auth::id())
+            ->where('is_deleted', true)
+            ->latest()
+            ->get();
+
+        return view('files.bin', compact('files'));
+    }
+
+    // Restore a soft-deleted file (only if owned by user)
+    public function restore($id)
+    {
+        $file = File::where('id', $id)
+            ->where('user_id', Auth::id())
+            ->where('is_deleted', true)
+            ->firstOrFail();
+
+        $file->update(['is_deleted' => false]);
+
+        return redirect()->route('files.bin')->with('success', 'File restored successfully.');
+    }
+
+    // Permanently delete a soft-deleted file
+    public function forceDelete($id)
+    {
+        $file = File::where('id', $id)
+            ->where('user_id', Auth::id())
+            ->where('is_deleted', true)
+            ->firstOrFail();
+
+        $file->delete(); // If you want to remove file from storage, add Storage::delete() here
+
+        return redirect()->route('files.bin')->with('success', 'File permanently deleted.');
+    }
+
+    public function forceDeleteAll()
+{
+    $userId = Auth::id();
+
+    $files = File::where('user_id', $userId)
+                 ->where('is_deleted', true)
+                 ->get();
+
+    if ($files->isEmpty()) {
+        return response()->json([
+            'success' => false,
+            'message' => 'No deleted files to remove.'
+        ]);
+    }
+
+    foreach ($files as $file) {
+        $file->delete(); // use Storage::delete($file->file_path) if you want to delete the file itself
+    }
+
+    return response()->json([
+        'success' => true,
+        'message' => 'All deleted files permanently removed.'
+    ]);
+}
+
+
 }

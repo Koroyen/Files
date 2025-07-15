@@ -5,6 +5,7 @@
 
 @section('content')
     <div class="text-center mt-5">
+        
         <h1 class="text-white">Welcome{{ Auth::check() ? ', ' . (Auth::user()->name ?? Auth::user()->username) : '' }}!</h1>
         <p class="lead text-light">
             {{ Auth::check() 
