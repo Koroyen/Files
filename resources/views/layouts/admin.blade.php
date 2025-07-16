@@ -14,9 +14,9 @@
     <a class="navbar-brand" href="{{ route('admin.dashboard') }}">AdminPanel</a>
     <div class="collapse navbar-collapse">
         <ul class="navbar-nav ms-auto">
-            <!-- <li class="nav-item">
+            <li class="nav-item">
                 <a href="{{ route('admin.dashboard') }}" class="nav-link">Dashboard</a>
-            </li> -->
+            </li>
             <li class="nav-item">
                 <a href="{{ route('logout') }}"
                    class="nav-link"

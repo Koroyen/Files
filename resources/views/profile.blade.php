@@ -17,18 +17,13 @@
                     <div class="text-secondary small">Joined: {{ Auth::user()->created_at->format('F d, Y') }}</div>
                 </div>
             </div>
-            <div>
-                <a href="{{ route('files.bin') }}" class="btn btn-outline-danger">
-                    <i class="bi bi-trash3"></i> Bin
-                </a>
-            </div>
         </div>
 
 
         <hr class="border-secondary">
         <div class="mb-3">
             <strong>Total Uploads:</strong> {{ $files->total() }}
-            
+
         </div>
 
         <h5 class="mb-3">My Uploads</h5>
@@ -73,19 +68,25 @@
                     <td>{{ \Carbon\Carbon::parse($file->updated_at)->format('Y-m-d') }}</td>
                     <td>{{ $file->created_at->format('Y-m-d') }}</td>
                     <td>
-                        <!-- View Modal Trigger -->
-                        <a href="#" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#viewFileModal{{ $file->id }}" title="View">
-                            <i class="bi bi-eye"></i>
+                        <!-- View Button -->
+                        <a href="#" data-bs-toggle="modal" data-bs-target="#viewFileModal{{ $file->id }}">
+                            <i class="bi bi-eye text-primary m-2"></i>
                         </a>
-                        <a href="{{ route('files.edit', ['file' => $file->id, 'redirect' => 'profile']) }}" class="btn btn-sm btn-outline-warning" title="Edit">
+
+                        <!-- Edit Button -->
+                        <a href="{{ route('files.edit', ['file' => $file->id, 'redirect' => 'dashboard']) }}" class="bi  text-warning me-2" title="Edit">
                             <i class="bi bi-pencil"></i>
                         </a>
-                        <form action="{{ route('files.destroy', $file->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Delete this file?');">
+
+                        <!-- Request Delete Button -->
+                        <form action="{{ route('files.requestDeletion', $file->id) }}" method="POST" style="display:inline;">
                             @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete"><i class="bi bi-trash"></i></button>
+                            <button type="submit" style="background: none; border: none; padding: 0;" onclick="return confirm('Send delete request to admin?')">
+                                <i class="bi bi-envelope-exclamation text-danger ms-2"></i>
+                            </button>
                         </form>
                     </td>
+
                 </tr>
 
                 <!-- Modal for Viewing File Details -->

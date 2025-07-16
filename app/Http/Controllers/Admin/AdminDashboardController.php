@@ -14,6 +14,8 @@ class AdminDashboardController extends Controller
         return view('admin.dashboard', [
             'userCount' => User::count(),
             'fileCount' => File::count(),
+            'pendingRequests' => \App\Models\DeleteRequest::where('status', 'pending')->count(),
+
         ]);
     }
 }

@@ -29,7 +29,15 @@
                     </div>
                 </div>
             </div>
-            <!-- Add more cards or widgets here -->
+           <div class="col-md-4">
+    <div class="card bg-danger text-white mb-3">
+        <div class="card-body d-flex flex-column justify-content-between">
+            <h5 class="card-title">Pending Deletion Requests</h5>
+            <p class="card-text display-6">{{ $pendingRequests }}</p>
+            <a href="{{ route('admin.requests.index') }}" class="btn btn-light mt-2">View Requests</a>
+        </div>
+    </div>
+</div>
         </div>
     </div>
 </div>

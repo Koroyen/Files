@@ -7,12 +7,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\File;
 use Illuminate\Support\Str;
+use App\Models\DeleteRequest;
+
 
 class FileController extends Controller
 {
     public function send(Request $request)
     {
-
         $request->validate([
             'document_number' => 'required|string|max:255',
             'type' => 'required|string|max:255',
@@ -29,14 +30,14 @@ class FileController extends Controller
         }
 
         File::create([
-            'user_id' => Auth::id(), // <-- Add this line
+            'user_id' => Auth::id(),
             'type' => $request->type,
             'document_number' => $request->document_number,
             'title' => $request->title,
             'remarks' => $request->remarks,
             'file_path' => $filePath,
             'is_deleted' => false,
-            'uuid' => Str::uuid(), // Generate a UUID
+            'uuid' => Str::uuid(),
         ]);
 
         return redirect()->route('dashboard')->with('success', 'File uploaded successfully!');
@@ -44,7 +45,7 @@ class FileController extends Controller
 
     public function edit(File $file, Request $request)
     {
-        $redirect = $request->query('redirect'); // get redirect value from URL
+        $redirect = $request->query('redirect');
         return view('files.edit', compact('file', 'redirect'));
     }
 
@@ -72,9 +73,7 @@ class FileController extends Controller
             'updated_by' => Auth::id(),
         ]);
 
-        // Redirect based on source
         $redirect = $request->input('redirect');
-
         if ($redirect === 'profile') {
             return redirect()->route('profile.index')->with('success', 'File updated successfully!');
         }
@@ -82,14 +81,6 @@ class FileController extends Controller
         return redirect()->route('dashboard')->with('success', 'File updated successfully!');
     }
 
-
-    public function destroy(File $file)
-    {
-        $file->update(['is_deleted' => true]);
-        return redirect()->route('dashboard')->with('success', 'File deleted!');
-    }
-
-    // Show deleted files for the logged-in user
     public function bin()
     {
         $files = File::where('user_id', Auth::id())
@@ -100,7 +91,6 @@ class FileController extends Controller
         return view('files.bin', compact('files'));
     }
 
-    // Restore a soft-deleted file (only if owned by user)
     public function restore($id)
     {
         $file = File::where('id', $id)
@@ -113,7 +103,6 @@ class FileController extends Controller
         return redirect()->route('files.bin')->with('success', 'File restored successfully.');
     }
 
-    // Permanently delete a soft-deleted file
     public function forceDelete($id)
     {
         $file = File::where('id', $id)
@@ -121,35 +110,55 @@ class FileController extends Controller
             ->where('is_deleted', true)
             ->firstOrFail();
 
-        $file->delete(); // If you want to remove file from storage, add Storage::delete() here
+        $file->delete();
 
         return redirect()->route('files.bin')->with('success', 'File permanently deleted.');
     }
 
     public function forceDeleteAll()
-{
-    $userId = Auth::id();
+    {
+        $userId = Auth::id();
 
-    $files = File::where('user_id', $userId)
-                 ->where('is_deleted', true)
-                 ->get();
+        $files = File::where('user_id', $userId)
+            ->where('is_deleted', true)
+            ->get();
 
-    if ($files->isEmpty()) {
+        if ($files->isEmpty()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'No deleted files to remove.'
+            ]);
+        }
+
+        foreach ($files as $file) {
+            $file->delete();
+        }
+
         return response()->json([
-            'success' => false,
-            'message' => 'No deleted files to remove.'
+            'success' => true,
+            'message' => 'All deleted files permanently removed.'
         ]);
     }
 
-    foreach ($files as $file) {
-        $file->delete(); // use Storage::delete($file->file_path) if you want to delete the file itself
+
+
+    public function requestDeletion(Request $request, File $file)
+    {
+        $user = Auth::user();
+
+        // Check if a pending request already exists
+        if (DeleteRequest::where('file_id', $file->id)->where('status', 'pending')->exists()) {
+            return back()->with('warning', 'A deletion request for this file is already pending.');
+        }
+
+        DeleteRequest::create([
+            'file_id' => $file->id,
+            'user_id' => $user->id,
+            'status' => 'pending',
+        ]);
+
+        // OPTIONAL: send email to admin here
+
+        return back()->with('success', 'Deletion request sent to the admin.');
     }
-
-    return response()->json([
-        'success' => true,
-        'message' => 'All deleted files permanently removed.'
-    ]);
-}
-
-
 }

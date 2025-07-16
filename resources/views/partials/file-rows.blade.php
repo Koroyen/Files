@@ -1,7 +1,7 @@
 @forelse($files as $file)
     @include('partials.file-row', ['file' => $file])
 
-    <!-- Modal for Viewing File Details -->
+    <!-- Modal for Viewing File Details
     <div class="modal fade my-modal" id="viewFileModal{{ $file->id }}" tabindex="-1" aria-labelledby="viewFileModalLabel{{ $file->id }}" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content bg-dark text-white">
@@ -36,4 +36,4 @@
     <tr>
         <td colspan="11" class="text-center">No files found.</td>
     </tr>
-@endforelse
+@endforelse -->
